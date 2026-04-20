@@ -1,0 +1,86 @@
+<div class="row justify-content-center mt-5">
+    <div class="col-md-7">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold"><i class="bi bi-person-plus-fill text-primary"></i> Sign up</h2>
+            <h5 class="text-muted">Let's start a new journey!</h5>
+        </div>
+        
+        <div class="card shadow-lg border-0 rounded-lg">
+            <div class="card-body p-5">
+                <form ng-submit="submitSignup()">
+                    
+                    <!-- STEP 1 -->
+                    <div ng-show="currentStep === 1" class="form-step slide-in">
+                        <h5 class="mb-4 border-bottom pb-2">Account Details (Step 1 of 2)</h5>
+                        
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="email" placeholder="Eg. example@email.com" ng-model="user.email" required>
+                            <label for="email">Email Address <span class="text-danger">*</span></label>
+                        </div>
+                        
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="adminName" placeholder="Eg. Joe Doe" ng-model="user.adminName" required>
+                            <label for="adminName">Admin name <span class="text-danger">*</span></label>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="username" placeholder="Eg. @joe_doe" ng-model="user.username" required>
+                                <label for="username">User name <span class="text-danger">*</span></label>
+                            </div>
+                            <div class="form-text small mt-2">
+                                Every username should be unique and must not contain <span class="text-danger">white spaces</span>, may consist of <span class="text-primary">numbers</span> and <span class="text-primary">letters</span> with <span class="text-primary">underscores</span>, and must not begin with a <span class="text-danger">number</span>.
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-3 position-relative">
+                            <input type="{{ showPassword ? 'text' : 'password' }}" class="form-control" id="password" placeholder="New password" ng-model="user.password" required>
+                            <label for="password">New password <span class="text-danger">*</span></label>
+                            <i class="bi" ng-class="showPassword ? 'bi-eye-slash' : 'bi-eye'" 
+                               ng-click="togglePassword()" 
+                               style="position: absolute; right: 15px; top: 18px; cursor: pointer; font-size: 1.2rem; color: #6c757d;">
+                            </i>
+                        </div>
+                        
+                        <div class="d-grid mt-4">
+                            <button type="button" class="btn btn-primary btn-lg" ng-click="nextStep()">Next <i class="bi bi-arrow-right ms-2"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2 -->
+                    <div ng-show="currentStep === 2" class="form-step slide-in">
+                        <h5 class="mb-4 border-bottom pb-2">Organization Details (Step 2 of 2)</h5>
+                        
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="moduleId" placeholder="Eg. Module1" ng-model="user.moduleId" required>
+                            <label for="moduleId">Module Id <span class="text-danger">*</span></label>
+                        </div>
+                        
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="orgName" placeholder="Eg. Coding Wizards" ng-model="user.orgName" required>
+                            <label for="orgName">Organization name <span class="text-danger">*</span></label>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label">Organization logo / File <span class="text-danger">*</span></label>
+                            <div class="border border-2 border-dashed rounded p-4 text-center bg-light" style="border-style: dashed !important; cursor: pointer;">
+                                <i class="bi bi-cloud-arrow-up display-4 text-primary mb-2"></i>
+                                <p class="mb-0 text-muted">Select a file or drag and drop here</p>
+                                <input class="form-control mt-3" type="file" id="formFile" file-model="user.logo">
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" class="btn btn-outline-secondary px-4" ng-click="prevStep()"><i class="bi bi-arrow-left me-2"></i> Back</button>
+                            <button type="submit" class="btn btn-primary px-5">Sign up <i class="bi bi-check2-circle ms-2"></i></button>
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>
+            <div class="card-footer text-center py-3 bg-light">
+                <div class="small"><a href="#!/login" class="text-decoration-none">Already have an account? Log in!</a></div>
+            </div>
+        </div>
+    </div>
+</div>
