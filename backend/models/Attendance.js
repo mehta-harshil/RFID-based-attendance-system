@@ -18,8 +18,7 @@ const attendanceSchema = new mongoose.Schema({
     required: true
   },
   presentStudents: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Student'
+    type: String   // stores enrollmentNumber (e.g. "240433116003")
   }],
   rfids: [{
     type: String

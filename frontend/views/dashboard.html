@@ -115,7 +115,7 @@
             </div>
 
             <div class="nav-item" ng-class="{'active': currentTab === 'studentInfo'}" ng-click="setTab('studentInfo')">
-                <i class="bi bi-people"></i> Manage Student 
+                <i class="bi bi-people"></i> Manage Student
             </div>
             <div class="nav-item" ng-class="{'active': currentTab === 'module'}" ng-click="setTab('module')">
                 <i class="bi bi-journal-text"></i> Manage Module
@@ -164,8 +164,11 @@
 
                 <!-- Dashboard Sub-Tabs -->
                 <div class="d-flex mb-4 gap-2 border-bottom pb-3">
-                    <button class="btn" ng-class="dashboardSubTab === 'overview' ? 'btn-primary' : 'btn-light text-muted'" ng-click="setDashboardSubTab('overview')">Overview</button>
-                    <button class="btn" ng-class="dashboardSubTab === 'log' ? 'btn-primary' : 'btn-light text-muted'" ng-click="setDashboardSubTab('log')">Attendance Log</button>
+                    <button class="btn"
+                        ng-class="dashboardSubTab === 'overview' ? 'btn-primary' : 'btn-light text-muted'"
+                        ng-click="setDashboardSubTab('overview')">Overview</button>
+                    <button class="btn" ng-class="dashboardSubTab === 'log' ? 'btn-primary' : 'btn-light text-muted'"
+                        ng-click="setDashboardSubTab('log')">Attendance Log</button>
                 </div>
 
                 <!-- ===== OVERVIEW SUB-TAB ===== -->
@@ -178,7 +181,8 @@
                             <div class="row g-3 mb-3">
                                 <div class="col-md-4">
                                     <label class="form-label text-muted small fw-semibold">Enrollment number</label>
-                                    <input type="text" class="form-control" placeholder="Eg. 1234567, 1234568" ng-model="metricsFilters.enrollments">
+                                    <input type="text" class="form-control" placeholder="Eg. 1234567, 1234568"
+                                        ng-model="metricsFilters.enrollments">
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label text-muted small fw-semibold">Start date</label>
@@ -190,7 +194,8 @@
                                 </div>
                                 <div class="col-md-2">
                                     <label class="form-label text-muted small fw-semibold">Min %</label>
-                                    <input type="number" class="form-control" placeholder="Eg. 60" ng-model="metricsFilters.minPercent" min="0" max="100">
+                                    <input type="number" class="form-control" placeholder="Eg. 60"
+                                        ng-model="metricsFilters.minPercent" min="0" max="100">
                                 </div>
                             </div>
                             <div class="row g-3 align-items-end">
@@ -212,8 +217,10 @@
                                     </select>
                                 </div>
                                 <div class="col-md-2 d-flex gap-2">
-                                    <button class="btn btn-light flex-grow-1" ng-click="resetMetricsFilters()">Reset</button>
-                                    <button class="btn btn-primary flex-grow-1" ng-click="fetchAttendanceMetrics()">Search</button>
+                                    <button class="btn btn-light flex-grow-1"
+                                        ng-click="resetMetricsFilters()">Reset</button>
+                                    <button class="btn btn-primary flex-grow-1"
+                                        ng-click="fetchAttendanceMetrics()">Search</button>
                                 </div>
                             </div>
                         </div>
@@ -227,7 +234,8 @@
                     <div class="alert alert-warning" ng-if="!metricsLoading && metricsError">{{ metricsError }}</div>
 
                     <!-- Metrics Matrix Table -->
-                    <div class="card shadow-sm border-0" style="border:1px solid #cdd4e0 !important;" ng-if="!metricsLoading && !metricsError && metricsData">
+                    <div class="card shadow-sm border-0" style="border:1px solid #cdd4e0 !important;"
+                        ng-if="!metricsLoading && !metricsError && metricsData">
                         <div class="card-body p-0">
                             <div class="table-responsive">
                                 <table class="table table-bordered mb-0" style="font-size:0.875rem;">
@@ -235,7 +243,9 @@
                                         <tr>
                                             <th class="sticky-col" style="min-width:130px;">Enrollment no.</th>
                                             <th style="min-width:140px;">Student name</th>
-                                            <th style="min-width:70px; text-align:center;" ng-repeat="d in metricsData.dates">{{ d | date:'dd/MM/yyyy' }}</th>
+                                            <th style="min-width:70px; text-align:center;"
+                                                ng-repeat="d in metricsData.dates track by $index">{{ formatDate(d) }}
+                                            </th>
                                             <th style="min-width:80px; text-align:center;">Present</th>
                                             <th style="min-width:80px; text-align:center;">Absent</th>
                                             <th style="min-width:70px; text-align:center;">%</th>
@@ -243,17 +253,23 @@
                                     </thead>
                                     <tbody>
                                         <tr ng-if="metricsData.students.length === 0">
-                                            <td colspan="99" class="text-center py-5 text-muted">No data found for the selected filters.</td>
+                                            <td colspan="99" class="text-center py-5 text-muted">No data found for the
+                                                selected filters.</td>
                                         </tr>
                                         <tr ng-repeat="row in metricsData.students">
                                             <td class="fw-semibold">{{ row.enrollmentNumber }}</td>
                                             <td>{{ row.name }}</td>
-                                            <td class="text-center" ng-repeat="status in row.dailyStatus">
-                                                <span class="badge" ng-class="status === 'P' ? 'bg-success' : 'bg-danger'">{{ status }}</span>
+                                            <td class="text-center"
+                                                ng-repeat="status in row.dailyStatus track by $index">
+                                                <span class="badge"
+                                                    ng-class="status === 'P' ? 'bg-success' : 'bg-danger'">{{ status
+                                                    }}</span>
                                             </td>
                                             <td class="text-center fw-bold text-success">{{ row.presentCount }}</td>
                                             <td class="text-center fw-bold text-danger">{{ row.absentCount }}</td>
-                                            <td class="text-center fw-bold" ng-class="row.percentage >= 75 ? 'text-success' : 'text-danger'">{{ row.percentage }}%</td>
+                                            <td class="text-center fw-bold"
+                                                ng-class="row.percentage >= 75 ? 'text-success' : 'text-danger'">{{
+                                                row.percentage }}%</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -283,17 +299,20 @@
                                     </thead>
                                     <tbody>
                                         <tr ng-if="attendanceLogs.length === 0">
-                                            <td colspan="5" class="text-center py-5 text-muted">No sessions recorded yet.</td>
+                                            <td colspan="5" class="text-center py-5 text-muted">No sessions recorded
+                                                yet.</td>
                                         </tr>
                                         <tr ng-repeat="log in attendanceLogs">
                                             <td>{{ log.date }}</td>
                                             <td>{{ log.day }}</td>
                                             <td>{{ log.time }}</td>
                                             <td>
-                                                <span ng-repeat="s in log.presentStudents" class="badge bg-primary me-1">{{ s.name }}</span>
+                                                <span ng-repeat="en in log.presentStudents track by $index"
+                                                    class="badge bg-primary me-1">{{ en }}</span>
                                             </td>
                                             <td>
-                                                <span ng-repeat="rfid in log.rfids" class="badge bg-secondary me-1">{{ rfid }}</span>
+                                                <span ng-repeat="rfid in log.rfids track by $index"
+                                                    class="badge bg-secondary me-1">{{ rfid }}</span>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -388,8 +407,8 @@
                                 </div>
                                 <div class="mb-4">
                                     <label class="fw-bold mb-2 text-dark">RFID Tag ID</label>
-                                    <input type="text" class="form-control py-2 text-muted" placeholder="Eg. AA BB CC DD"
-                                        ng-model="newStudent.rfid" required>
+                                    <input type="text" class="form-control py-2 text-muted"
+                                        placeholder="Eg. AA BB CC DD" ng-model="newStudent.rfid" required>
                                 </div>
                                 <div class="mb-4">
                                     <label class="fw-bold mb-3 d-block text-dark">Gender</label>
@@ -414,8 +433,8 @@
                                 </div>
                                 <div class="d-flex gap-3 mt-5">
                                     <button type="button" class="btn btn-light flex-grow-1 text-muted"
-                                        ng-click="newStudent = {gender: 'Male', rfid: ''}" style="background-color: #f1f3f5;"
-                                        ng-disabled="isScanning">Reset</button>
+                                        ng-click="newStudent = {gender: 'Male', rfid: ''}"
+                                        style="background-color: #f1f3f5;" ng-disabled="isScanning">Reset</button>
                                     <button type="submit" class="btn flex-grow-1"
                                         style="background-color: #e6edfb; color: #1c5f99; border: none; font-weight: 500;"
                                         ng-disabled="isScanning">
@@ -452,12 +471,6 @@
                                             already existing in the database.</p>
                                     </div>
 
-                                    <div>
-                                        <h6 class="text-muted mb-1" style="font-size: 0.9rem;">Attendance Update</h6>
-                                        <p class="text-muted small mb-0">Any existing attendance records for the newly
-                                            added student will be marked as absent, and you can update these records
-                                            from the attendance tab.</p>
-                                    </div>
                                 </div>
                             </div>
                         </div>

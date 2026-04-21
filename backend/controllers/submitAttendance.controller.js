@@ -45,7 +45,7 @@ exports.submitAttendance = async (req, res) => {
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const dayStr = days[now.getDay()];
 
-    const presentStudentIds = matchedStudents.map(student => student._id);
+    const presentStudentIds = matchedStudents.map(student => student.enrollmentNumber);
     const matchedRfids = matchedStudents.map(student => student.rfid);
 
     const newAttendance = new Attendance({

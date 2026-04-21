@@ -25,11 +25,11 @@ exports.getAttendanceMetrics = async (req, res) => {
     // 3. Collect all unique dates (columns)
     const dateSet = [...new Set(sessions.map(s => s.date))];
 
-    // 4. Build a map: date -> set of present student ObjectId strings
+    // 4. Build a map: date -> set of present enrollmentNumbers
     const dateToPresent = {};
     for (const s of sessions) {
       if (!dateToPresent[s.date]) dateToPresent[s.date] = new Set();
-      s.presentStudents.forEach(id => dateToPresent[s.date].add(id.toString()));
+      s.presentStudents.forEach(en => dateToPresent[s.date].add(en));
     }
 
     // 5. Fetch all students in this module
@@ -43,9 +43,9 @@ exports.getAttendanceMetrics = async (req, res) => {
     // 6. Build per-student attendance row
     const totalSessions = dateSet.length;
     let rows = students.map(student => {
-      const sid = student._id.toString();
+      const en = student.enrollmentNumber;
       const dailyStatus = dateSet.map(date =>
-        dateToPresent[date] && dateToPresent[date].has(sid) ? 'P' : 'A'
+        dateToPresent[date] && dateToPresent[date].has(en) ? 'P' : 'A'
       );
       const presentCount = dailyStatus.filter(s => s === 'P').length;
       const percentage = totalSessions > 0 ? Math.round((presentCount / totalSessions) * 100) : 0;
@@ -92,7 +92,6 @@ exports.getAttendanceLogs = async (req, res) => {
   try {
     const { moduleId } = req.params;
     const sessions = await Attendance.find({ moduleId })
-      .populate('presentStudents', 'name enrollmentNumber')
       .sort({ date: -1 });
     res.json(sessions);
   } catch (error) {

@@ -199,6 +199,15 @@ app.controller("DashboardController", function($scope, $location, $http) {
         if (tab === 'log') fetchAttendanceLogs();
     };
 
+    // --- Date Formatter ---
+    // Converts "YYYY-MM-DD" -> "DD/MM/YYYY" safely (avoids AngularJS date filter bug with plain strings)
+    $scope.formatDate = function(dateStr) {
+        if (!dateStr) return '';
+        var parts = dateStr.split('-');
+        if (parts.length === 3) return parts[2] + '/' + parts[1] + '/' + parts[0];
+        return dateStr;
+    };
+
     // --- Attendance Metrics ---
     $scope.metricsFilters = {};
     $scope.metricsData = null;
