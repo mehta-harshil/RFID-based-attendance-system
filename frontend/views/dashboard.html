@@ -56,6 +56,7 @@
         flex-grow: 1;
         display: flex;
         flex-direction: column;
+        min-width: 0;
     }
 
     .top-header {
@@ -100,6 +101,187 @@
         font-weight: 700;
         font-size: 1.8rem;
     }
+
+    /* Mobile Responsiveness for Samsung M12 and similar devices */
+    @media (max-width: 768px) {
+        .dashboard-wrapper {
+            display: block;
+            padding-bottom: 80px; /* Space for bottom nav */
+            background-color: #f8f9fc;
+        }
+
+        .sidebar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            flex-direction: row;
+            border-right: none;
+            border-top: 1px solid #e3e6f0;
+            border-bottom: none;
+            z-index: 1000;
+            background: #ffffff;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
+        }
+
+        .sidebar-brand {
+            display: none !important;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            padding: 0;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav-item {
+            flex-direction: column;
+            justify-content: center;
+            padding: 8px 5px;
+            gap: 4px;
+            font-size: 0.75rem;
+            border: none !important;
+            border-radius: 10px;
+            color: #6c757d;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .nav-item i {
+            font-size: 1.4rem;
+            margin-bottom: 2px;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background-color: transparent !important;
+            color: #0d6efd !important;
+            font-weight: 600;
+        }
+
+        .sidebar-footer {
+            display: none !important;
+        }
+
+        .top-header {
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 10px 15px;
+            min-height: 65px;
+            height: auto;
+            justify-content: space-between;
+        }
+
+        .content-area {
+            padding: 15px;
+        }
+
+        .greeting {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .greeting h4 {
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        .greeting h1 {
+            font-size: 1.6rem;
+        }
+
+        /* Segmented tabs for mobile */
+        .mobile-tabs {
+            display: flex;
+            background: #e9ecef;
+            border-radius: 10px;
+            padding: 4px !important;
+            margin-bottom: 20px;
+            border-bottom: none !important;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 5px;
+            scrollbar-width: none; /* Firefox */
+        }
+        .mobile-tabs::-webkit-scrollbar {
+            display: none; /* Chrome */
+        }
+        
+        .mobile-tabs .btn {
+            flex: 1 0 auto;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        
+        .mobile-tabs .btn.btn-primary {
+            background: #ffffff !important;
+            color: #0d6efd !important;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .mobile-tabs .btn.btn-light {
+            background: transparent !important;
+        }
+
+        /* Forms responsiveness */
+        .filters-card .col-md-4,
+        .filters-card .col-md-2 {
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .filters-card .d-flex.gap-2 {
+            margin-top: 15px;
+        }
+
+        .col-md-6.pe-5 {
+            padding-right: 15px !important;
+            border-right: none !important;
+            border-bottom: 1px solid #e3e6f0;
+            padding-bottom: 30px;
+            margin-bottom: 20px;
+        }
+
+        .col-md-6.ps-5 {
+            padding-left: 15px !important;
+        }
+
+        /* Adjusting buttons to be full-width on mobile */
+        .card-footer .btn {
+            width: 100% !important;
+            margin-right: 0 !important;
+            margin-bottom: 10px;
+        }
+
+        .card-footer .btn:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Module header adjustments */
+        .d-flex.justify-content-between.align-items-center.mb-4 {
+            flex-direction: column;
+            gap: 15px;
+            text-align: center;
+            align-items: stretch !important;
+        }
+        
+        .org-badge {
+            font-size: 0.85rem;
+            padding: 8px 12px !important;
+            line-height: 1.2;
+            align-items: center;
+        }
+    }
 </style>
 
 <div class="dashboard-wrapper">
@@ -140,14 +322,17 @@
                 {{ userProfile.orgName || 'Loading Organization...' }}
             </div>
 
-            <!-- Uploaded Logo -->
-            <div>
-                <img ng-if="userProfile.logoPath" ng-src="{{serverUrl}}{{userProfile.logoPath}}" alt="Logo"
-                    style="height: 40px; width: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #e3e6f0;">
-                <div ng-if="!userProfile.logoPath"
-                    class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center"
-                    style="height: 40px; width: 40px;">
-                    <i class="bi bi-person"></i>
+            <!-- Uploaded Logo & Mobile Logout -->
+            <div class="d-flex align-items-center gap-3">
+
+                <div>
+                    <img ng-if="userProfile.logoPath" ng-src="{{serverUrl}}{{userProfile.logoPath}}" alt="Logo"
+                        style="height: 40px; width: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #e3e6f0;">
+                    <div ng-if="!userProfile.logoPath"
+                        class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center"
+                        style="height: 40px; width: 40px;">
+                        <i class="bi bi-person"></i>
+                    </div>
                 </div>
             </div>
         </div>
@@ -163,7 +348,7 @@
                 </div>
 
                 <!-- Dashboard Sub-Tabs -->
-                <div class="d-flex mb-4 gap-2 border-bottom pb-3">
+                <div class="d-flex mb-4 gap-2 border-bottom pb-3 mobile-tabs">
                     <button class="btn"
                         ng-class="dashboardSubTab === 'overview' ? 'btn-primary' : 'btn-light text-muted'"
                         ng-click="setDashboardSubTab('overview')">Overview</button>
@@ -176,7 +361,7 @@
                     <h5 class="fw-bold mb-3" style="color:#0b1a30;">Attendance metrics</h5>
 
                     <!-- Filters Card -->
-                    <div class="card shadow-sm border-0 mb-4" style="border:1px solid #cdd4e0 !important;">
+                    <div class="card shadow-sm border-0 mb-4 filters-card" style="border:1px solid #cdd4e0 !important;">
                         <div class="card-body p-4">
                             <div class="row g-3 mb-3">
                                 <div class="col-md-4">
@@ -287,14 +472,14 @@
                     <div class="card shadow-sm border-0" style="border:1px solid #cdd4e0 !important;">
                         <div class="card-body p-0">
                             <div class="table-responsive">
-                                <table class="table table-hover mb-0">
+                                <table class="table table-bordered table-hover mb-0" style="font-size:0.875rem; white-space: nowrap;">
                                     <thead class="table-light">
                                         <tr>
-                                            <th>Date</th>
-                                            <th>Day</th>
-                                            <th>Time</th>
-                                            <th>Students Present</th>
-                                            <th>RFIDs Matched</th>
+                                            <th style="min-width: 100px;">Date</th>
+                                            <th style="min-width: 100px;">Day</th>
+                                            <th style="min-width: 100px;">Time</th>
+                                            <th style="min-width: 250px;">Students Present</th>
+                                            <th style="min-width: 250px;">RFIDs Matched</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -326,7 +511,7 @@
             <!-- Student Info Tab -->
             <div ng-show="currentTab === 'studentInfo'">
                 <!-- Sub-tab menu -->
-                <div class="d-flex mb-4 gap-2 border-bottom pb-3">
+                <div class="d-flex mb-4 gap-2 border-bottom pb-3 mobile-tabs">
                     <button class="btn" ng-class="studentTab === 'overview' ? 'btn-primary' : 'btn-light text-muted'"
                         ng-click="setStudentTab('overview')">Overview</button>
                     <button class="btn" ng-class="studentTab === 'add' ? 'btn-primary' : 'btn-light text-muted'"
@@ -359,26 +544,24 @@
                     <div class="card shadow-sm border-0 rounded-0" style="border: 1px solid #cdd4e0 !important;">
                         <div class="card-body p-0">
                             <div class="table-responsive">
-                                <table class="table table-borderless mb-0">
-                                    <thead class="bg-light text-muted" style="border-bottom: 2px solid #e3e6f0;">
+                                <table class="table table-bordered mb-0" style="font-size:0.875rem; white-space: nowrap;">
+                                    <thead class="table-light">
                                         <tr>
-                                            <th class="text-center py-3" style="width: 100px; font-weight: normal;">Sr
-                                                no.</th>
-                                            <th class="py-3" style="font-weight: normal;">Enrollment Number</th>
-                                            <th class="py-3" style="font-weight: normal;">Name</th>
-                                            <th class="py-3" style="font-weight: normal;">Gender</th>
+                                            <th class="text-center" style="min-width: 70px;">Sr no.</th>
+                                            <th style="min-width: 160px;">Enrollment Number</th>
+                                            <th style="min-width: 200px;">Name</th>
+                                            <th style="min-width: 100px;">Gender</th>
                                         </tr>
                                     </thead>
                                     <tbody style="color: #6c757d;">
-                                        <tr ng-repeat="student in studentsList"
-                                            style="border-bottom: 1px solid #f1f2f6;">
-                                            <td class="text-center py-3">{{ $index + 1 }}</td>
-                                            <td class="py-3">{{ student.enrollmentNumber }}</td>
-                                            <td class="py-3">{{ student.name }}</td>
-                                            <td class="py-3">{{ student.gender }}</td>
+                                        <tr ng-repeat="student in studentsList">
+                                            <td class="text-center">{{ $index + 1 }}</td>
+                                            <td class="fw-semibold text-dark">{{ student.enrollmentNumber }}</td>
+                                            <td>{{ student.name }}</td>
+                                            <td>{{ student.gender }}</td>
                                         </tr>
                                         <tr ng-if="studentsList.length === 0">
-                                            <td colspan="4" class="text-center py-5 text-muted">No students enrolled
+                                            <td colspan="4" class="text-center py-4 text-muted">No students enrolled
                                                 yet.</td>
                                         </tr>
                                     </tbody>
@@ -450,7 +633,7 @@
                         </div>
 
                         <!-- Instructions -->
-                        <div class="col-md-6 ps-5 position-relative mt-4">
+                        <div class="col-md-6 ps-5 position-relative mt-4 d-none d-md-block">
                             <div class="text-center position-absolute w-100" style="top: -20px; z-index: 10;">
                                 <div class="d-inline-flex justify-content-center align-items-center rounded-circle"
                                     style="width: 40px; height: 40px; background-color: #4faaf7; color: white; font-weight: bold; font-size: 20px; box-shadow: 0 0 20px rgba(79, 170, 247, 0.4);">
@@ -515,7 +698,7 @@
                         </div>
 
                         <!-- Warning Card -->
-                        <div class="col-md-6 ps-5 position-relative mt-4">
+                        <div class="col-md-6 ps-5 position-relative mt-4 d-none d-md-block">
                             <div class="text-center position-absolute w-100" style="top: -20px; z-index: 10;">
                                 <div class="d-inline-flex justify-content-center align-items-center rounded-circle"
                                     style="width: 40px; height: 40px; background-color: #f76262; color: white; font-size: 18px; box-shadow: 0 0 20px rgba(247, 98, 98, 0.4);">
