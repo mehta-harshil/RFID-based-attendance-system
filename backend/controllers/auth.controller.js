@@ -12,7 +12,10 @@ exports.register = async (req, res) => {
     }
     
     // Minimal: Save password as plain text (as requested by user)
-    const logoPath = req.file ? `/uploads/${req.file.filename}` : null;
+    // Convert uploaded logo to base64 data URL (stored in MongoDB, no disk needed)
+    const logoPath = req.file 
+      ? `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`
+      : null;
 
     user = new User({ 
       email, adminName, username, password, moduleId, orgName, logoPath, role: 'admin' 

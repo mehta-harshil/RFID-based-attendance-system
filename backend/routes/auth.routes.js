@@ -4,16 +4,8 @@ const authController = require('../controllers/auth.controller');
 const multer = require('multer');
 const path = require('path');
 
-// Configure Multer Storage
-const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, path.join(__dirname, '../uploads/'));
-  },
-  filename: function(req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // Appending extension
-  }
-});
-const upload = multer({ storage: storage });
+// Use memory storage — Railway has no persistent disk
+const upload = multer({ storage: multer.memoryStorage() });
 
 // @route   POST api/auth/register
 // @desc    Register user
