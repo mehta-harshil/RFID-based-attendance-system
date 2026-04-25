@@ -9,7 +9,10 @@ const PORT = process.env.PORT || 5000;
 const path = require('path');
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: true,        // allow any origin (we'll restrict after getting Vercel URL)
+  credentials: true
+}));
 app.use(express.json());
 
 // Custom Logging Middleware to print API calls and their payloads
@@ -19,6 +22,13 @@ app.use((req, res, next) => {
   // If there's a payload (body), print it
   if (req.body && Object.keys(req.body).length > 0) {
     console.log('Payload:', JSON.stringify(req.body, null, 2));
+  }
+  
+  // Check for cookies
+  if (req.headers.cookie) {
+    console.log('Cookies saved on device:', req.headers.cookie);
+  } else {
+    console.log('no cookie send');
   }
   
   next();

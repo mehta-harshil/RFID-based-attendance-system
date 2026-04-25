@@ -35,7 +35,7 @@ app.controller("SignupController", function($scope, $location, $http) {
                 fd.append('logo', $scope.user.logo);
             }
 
-            $http.post('http://' + window.location.hostname + ':5000/api/auth/register', fd, {
+            $http.post(API_BASE_URL + '/api/auth/register', fd, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}
             })

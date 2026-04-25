@@ -281,6 +281,37 @@
             line-height: 1.2;
             align-items: center;
         }
+
+        /* Show reload button only on mobile */
+        .mobile-reload-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background-color: #e8f0fe;
+            color: #0d6efd;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.2s, transform 0.3s;
+        }
+
+        .mobile-reload-btn:hover {
+            background-color: #d0e3fc;
+        }
+
+        .mobile-reload-btn:active {
+            transform: rotate(180deg);
+        }
+    }
+
+    /* Hide reload button on desktop */
+    @media (min-width: 769px) {
+        .mobile-reload-btn {
+            display: none;
+        }
     }
 </style>
 
@@ -322,8 +353,13 @@
                 {{ userProfile.orgName || 'Loading Organization...' }}
             </div>
 
-            <!-- Uploaded Logo & Mobile Logout -->
+            <!-- Uploaded Logo & Mobile Reload -->
             <div class="d-flex align-items-center gap-3">
+
+                <!-- Reload button: only visible on mobile -->
+                <button class="mobile-reload-btn" onclick="window.location.reload()" title="Reload">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
 
                 <div>
                     <img ng-if="userProfile.logoPath" ng-src="{{serverUrl}}{{userProfile.logoPath}}" alt="Logo"

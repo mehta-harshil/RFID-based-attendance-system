@@ -47,7 +47,7 @@ app.run(function($rootScope, $location, $http) {
         if (usernameCookie && (!next.$$route || next.$$route.originalPath === '/login' || next.$$route.originalPath === '/signup' || next.$$route.originalPath === '/forgot-password')) {
             event.preventDefault();
             
-            $http.get('http://localhost:5000/api/auth/check/' + usernameCookie)
+            $http.get(API_BASE_URL + '/api/auth/check/' + usernameCookie)
             .then(function(response) {
                 if(response.data.exists) {
                     $location.path('/dashboard');

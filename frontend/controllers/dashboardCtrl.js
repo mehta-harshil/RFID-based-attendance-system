@@ -14,7 +14,7 @@ app.controller("DashboardController", function($scope, $location, $http) {
     }
 
     $scope.userProfile = {};
-    $scope.serverUrl = "http://" + window.location.hostname + ":5000";
+    $scope.serverUrl = API_BASE_URL;
 
     // Fetch user profile
     $http.get($scope.serverUrl + '/api/auth/profile/' + username)

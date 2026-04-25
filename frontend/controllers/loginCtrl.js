@@ -9,7 +9,7 @@ app.controller("LoginController", function($scope, $location, $http) {
 
     $scope.login = function() {
         if ($scope.user.identifier && $scope.user.password) {
-            $http.post('http://' + window.location.hostname + ':5000/api/auth/login', {
+            $http.post(API_BASE_URL + '/api/auth/login', {
                 identifier: $scope.user.identifier,
                 password: $scope.user.password
             })
