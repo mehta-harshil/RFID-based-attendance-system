@@ -280,7 +280,7 @@ app.controller("DashboardController", function($scope, $location, $http) {
                 console.error("Error fetching students", error);
             });
     }
-})
+
 
     // ===================== MANUAL ATTENDANCE =====================
     $scope.manualAttendance = { input: '', selected: [], saving: false, error: null, success: null };
