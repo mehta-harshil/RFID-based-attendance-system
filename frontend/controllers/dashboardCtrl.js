@@ -280,5 +280,80 @@ app.controller("DashboardController", function($scope, $location, $http) {
                 console.error("Error fetching students", error);
             });
     }
-});
+})
 
+    // ===================== MANUAL ATTENDANCE =====================
+    $scope.manualAttendance = { input: '', selected: [], saving: false, error: null, success: null };
+
+    $scope.getStudentName = function(en) {
+        var s = $scope.studentsList.find(function(st) { return st.enrollmentNumber === en; });
+        return s ? s.name : '-';
+    };
+    $scope.getStudentGender = function(en) {
+        var s = $scope.studentsList.find(function(st) { return st.enrollmentNumber === en; });
+        return s ? s.gender : '-';
+    };
+    $scope.getStudentRfid = function(en) {
+        var s = $scope.studentsList.find(function(st) { return st.enrollmentNumber === en; });
+        return s ? s.rfid : null;
+    };
+    $scope.addEnrollmentManual = function() {
+        var en = ($scope.manualAttendance.input || '').trim();
+        if (!en) return;
+        if ($scope.manualAttendance.selected.indexOf(en) !== -1) {
+            $scope.manualAttendance.error = en + ' is already added.';
+            $scope.manualAttendance.input = '';
+            return;
+        }
+        $scope.manualAttendance.selected.push(en);
+        $scope.manualAttendance.input = '';
+        $scope.manualAttendance.error = null;
+        $scope.manualAttendance.success = null;
+    };
+    $scope.addEnrollmentOnEnter = function($event) {
+        if ($event.keyCode === 13) $scope.addEnrollmentManual();
+    };
+    $scope.removeEnrollment = function(idx) {
+        $scope.manualAttendance.selected.splice(idx, 1);
+        $scope.manualAttendance.error = null;
+        $scope.manualAttendance.success = null;
+    };
+    $scope.selectAllStudents = function() {
+        $scope.manualAttendance.selected = $scope.studentsList.map(function(s) { return s.enrollmentNumber; });
+        $scope.manualAttendance.error = null;
+        $scope.manualAttendance.success = null;
+    };
+    $scope.clearManualAttendance = function() {
+        $scope.manualAttendance = { input: '', selected: [], saving: false, error: null, success: null };
+    };
+    $scope.saveManualAttendance = function() {
+        $scope.manualAttendance.error = null;
+        $scope.manualAttendance.success = null;
+        var rfidIds = [];
+        var notFound = [];
+        $scope.manualAttendance.selected.forEach(function(en) {
+            var rfid = $scope.getStudentRfid(en);
+            if (rfid) { rfidIds.push(rfid); } else { notFound.push(en); }
+        });
+        if (notFound.length > 0) {
+            $scope.manualAttendance.error = 'Not found in database: ' + notFound.join(', ');
+            return;
+        }
+        if (rfidIds.length === 0) {
+            $scope.manualAttendance.error = 'No valid students selected.';
+            return;
+        }
+        $scope.manualAttendance.saving = true;
+        $http.post($scope.serverUrl + '/api/submit-attendance/' + $scope.userProfile.moduleId, { ids: rfidIds })
+            .then(function(response) {
+                $scope.manualAttendance.saving = false;
+                $scope.manualAttendance.success = 'Attendance saved! ' + response.data.matchedCount + ' student(s) marked present.';
+                $scope.manualAttendance.selected = [];
+                $scope.manualAttendance.input = '';
+            })
+            .catch(function(error) {
+                $scope.manualAttendance.saving = false;
+                $scope.manualAttendance.error = (error.data && error.data.message) ? error.data.message : 'Failed to save attendance.';
+            });
+    };
+});

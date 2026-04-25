@@ -330,6 +330,9 @@
             <div class="nav-item" ng-class="{'active': currentTab === 'studentInfo'}" ng-click="setTab('studentInfo')">
                 <i class="bi bi-people"></i> Manage Student
             </div>
+            <div class="nav-item" ng-class="{'active': currentTab === 'addAttendance'}" ng-click="setTab('addAttendance')">
+                <i class="bi bi-calendar-check"></i> Add Attendance
+            </div>
             <div class="nav-item" ng-class="{'active': currentTab === 'module'}" ng-click="setTab('module')">
                 <i class="bi bi-journal-text"></i> Manage Module
             </div>
@@ -828,6 +831,116 @@
                 </div>
             </div>
 
+            <!-- ===================== ADD ATTENDANCE TAB ===================== -->
+            <div ng-show="currentTab === 'addAttendance'">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2 class="fw-bold m-0" style="color: #2c3e50;">Add Attendance</h2>
+                        <p class="text-muted small mt-1 mb-0">Manually mark students present by entering their enrollment numbers.</p>
+                    </div>
+                    <span class="badge bg-primary fs-6">{{ manualAttendance.selected.length }} selected</span>
+                </div>
+
+                <!-- Input row -->
+                <div class="card shadow-sm border-0 mb-4" style="border: 1px solid #cdd4e0 !important;">
+                    <div class="card-body p-4">
+                        <label class="fw-bold mb-2 text-dark">Enter Enrollment Number</label>
+                        <div class="d-flex gap-2">
+                            <input type="text" class="form-control"
+                                placeholder="e.g. 2200123456"
+                                ng-model="manualAttendance.input"
+                                ng-keyup="addEnrollmentOnEnter($event)"
+                                style="max-width: 320px;">
+                            <button class="btn btn-primary px-4" style="background-color:#1c5f99; border-color:#1c5f99;"
+                                ng-click="addEnrollmentManual()">
+                                <i class="bi bi-plus-lg me-1"></i> Add
+                            </button>
+                            <button class="btn btn-light px-4 text-muted" ng-click="selectAllStudents()">
+                                <i class="bi bi-check2-all me-1"></i> Select All
+                            </button>
+                            <button class="btn btn-light px-4 text-muted" ng-click="clearManualAttendance()">
+                                <i class="bi bi-x-circle me-1"></i> Clear
+                            </button>
+                        </div>
+
+                        <!-- Chips -->
+                        <div class="mt-3 d-flex flex-wrap gap-2" ng-if="manualAttendance.selected.length > 0">
+                            <span ng-repeat="en in manualAttendance.selected track by $index"
+                                class="badge d-flex align-items-center gap-1 px-3 py-2"
+                                style="background-color:#e6edfb; color:#1c5f99; font-size:0.85rem; border-radius:20px;">
+                                {{ en }}
+                                <i class="bi bi-x-lg" style="cursor:pointer; font-size:0.7rem;"
+                                    ng-click="removeEnrollment($index)"></i>
+                            </span>
+                        </div>
+                        <p class="text-muted small mt-3 mb-0" ng-if="manualAttendance.selected.length === 0">
+                            <i class="bi bi-info-circle me-1"></i> No students added yet. Type an enrollment number and click Add or press Enter.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Preview Table -->
+                <div class="card shadow-sm border-0 mb-4" style="border: 1px solid #cdd4e0 !important;" ng-if="manualAttendance.selected.length > 0">
+                    <div class="card-body p-0">
+                        <div class="px-4 py-3" style="border-bottom: 1px solid #e3e6f0;">
+                            <h6 class="fw-bold mb-0 text-dark">Selected Students Preview</h6>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered mb-0" style="font-size:0.875rem;">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width:60px;" class="text-center">Sr.</th>
+                                        <th>Enrollment Number</th>
+                                        <th>Name</th>
+                                        <th>Gender</th>
+                                        <th style="width:80px;" class="text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="en in manualAttendance.selected track by $index">
+                                        <td class="text-center">{{ $index + 1 }}</td>
+                                        <td class="fw-semibold">{{ en }}</td>
+                                        <td>{{ getStudentName(en) }}</td>
+                                        <td>{{ getStudentGender(en) }}</td>
+                                        <td class="text-center">
+                                            <span ng-if="getStudentRfid(en)"
+                                                class="badge bg-success">Valid</span>
+                                            <span ng-if="!getStudentRfid(en)"
+                                                class="badge bg-danger">Not Found</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error/Success messages -->
+                <div class="alert alert-danger" ng-if="manualAttendance.error">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ manualAttendance.error }}
+                </div>
+                <div class="alert alert-success" ng-if="manualAttendance.success">
+                    <i class="bi bi-check-circle-fill me-2"></i>{{ manualAttendance.success }}
+                </div>
+
+                <!-- Save button -->
+                <div class="text-end">
+                    <button class="btn btn-primary px-5 py-2"
+                        style="background-color:#1c5f99; border-color:#1c5f99; font-weight:500;"
+                        ng-click="saveManualAttendance()"
+                        ng-disabled="manualAttendance.selected.length === 0 || manualAttendance.saving">
+                        <span ng-if="!manualAttendance.saving">
+                            <i class="bi bi-save me-2"></i>Save Attendance
+                        </span>
+                        <span ng-if="manualAttendance.saving">
+                            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                            Saving...
+                        </span>
+                    </button>
+                </div>
+            </div>
+
         </div>
+
     </div>
 </div>
