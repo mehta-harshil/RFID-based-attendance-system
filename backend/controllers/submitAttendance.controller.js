@@ -34,16 +34,20 @@ exports.submitAttendance = async (req, res) => {
 
     // 3. Create one entry with time, date, day and array of id
     const now = new Date();
-    
-    // Formatting date as YYYY-MM-DD
-    const dateStr = now.toISOString().split('T')[0];
-    
-    // Formatting time as HH:MM:SS
-    const timeStr = now.toTimeString().split(' ')[0];
-    
-    // Formatting day as full weekday name
+
+    // Convert UTC to IST (UTC+5:30)
+    const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000; // 5 hours 30 minutes in ms
+    const nowIST = new Date(now.getTime() + IST_OFFSET_MS);
+
+    // Formatting date as YYYY-MM-DD (in IST)
+    const dateStr = nowIST.toISOString().split('T')[0];
+
+    // Formatting time as HH:MM:SS (in IST)
+    const timeStr = nowIST.toISOString().split('T')[1].split('.')[0];
+
+    // Formatting day as full weekday name (in IST)
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const dayStr = days[now.getDay()];
+    const dayStr = days[nowIST.getUTCDay()];
 
     const presentStudentIds = matchedStudents.map(student => student.enrollmentNumber);
     const matchedRfids = matchedStudents.map(student => student.rfid);

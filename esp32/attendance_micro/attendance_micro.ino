@@ -29,7 +29,7 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);
 #define LED_BLUE  27   // Configuration mode
 
 // ── Server ──
-String BASE_URL   = "http://10.66.152.102:5000/";
+String BASE_URL   = "https://rfid-based-attendance-system-production.up.railway.app/";
 String module_id  = "";
 
 // ============================================================
