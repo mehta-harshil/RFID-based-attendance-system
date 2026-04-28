@@ -10,8 +10,8 @@
 
 
 ## 🎥 Video Demonstrations
-- **Web Interface Demo:** https://www.youtube.com/watch?v=n8xxNAREHfk
-- **Android App Demo:** https://www.youtube.com/watch?v=sUSlpH7CBAk
+- **Web Interface Demo:** https://drive.google.com/file/d/1WDDJE79NcUT8qj147G0UfTexEUpKg6Km/view?usp=sharing
+- **Android App Demo:** https://drive.google.com/file/d/18rC3_gJ9vc1W7-gnB6J00erMVmNr6CO2/view?usp=sharing
 
 
 
