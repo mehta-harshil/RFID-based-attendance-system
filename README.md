@@ -10,8 +10,8 @@
 
 
 ## 🎥 Video Demonstrations
-- **Web Interface Demo:** https://github.com/user-attachments/assets/cc4984ae-bc3d-4acf-ad2f-4803cbafb40a
-- **Android App Demo:** https://github.com/user-attachments/assets/a813f3d7-dca0-4a60-83f9-9a54082a7df1
+- **Web Interface Demo:** https://www.youtube.com/watch?v=n8xxNAREHfk
+- **Android App Demo:** https://www.youtube.com/watch?v=sUSlpH7CBAk
 
 
 
