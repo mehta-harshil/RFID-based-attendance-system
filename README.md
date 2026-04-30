@@ -10,11 +10,14 @@
 
 
 ## 🎥 Video Demonstrations
-- **Web Interface Demo:** [Insert YouTube/Drive Link Here]
-- **Android App Demo:** [Insert YouTube/Drive Link Here]
+- **Web Interface Demo:** https://drive.google.com/file/d/1WDDJE79NcUT8qj147G0UfTexEUpKg6Km/view?usp=sharing
+- **Android App Demo:** https://drive.google.com/file/d/18rC3_gJ9vc1W7-gnB6J00erMVmNr6CO2/view?usp=sharing
+
+
 
 ## 🏗 System Architecture
-![System Architecture](./architecture.png)
+<img width="1031" height="687" alt="System_Architecture" src="https://github.com/user-attachments/assets/9e58805d-1485-44b4-9603-a84c27f349b7" />
+
 
 **How it works:**
 1. **Module (ESP32 + RFID):** Scans the student's ID card and sends the UID to the local network.
