@@ -62,6 +62,6 @@ app.use('/api/attendance-metrics', require('./routes/attendanceMetrics.routes'))
 app.use('/api/student', require('./routes/student.routes'));
 app.use('/api/wifi', require('./routes/wifi.routes'));
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

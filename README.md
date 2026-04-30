@@ -93,4 +93,8 @@ npm start
 5. **Monitoring:** Log in via the Web Dashboard or Android App ("Present Sir") to view real-time attendance logs, track analytics, and manage users.
 
 ---
+<<<<<<< HEAD
 *Developed by [Harshil Mehta](https://github.com/mehta-harshil)*
+=======
+*Developed by [Harshil Mehta](https://github.com/mehta-harshil)*
+>>>>>>> eeafff89813160122459192e1f555d14bc681b78
