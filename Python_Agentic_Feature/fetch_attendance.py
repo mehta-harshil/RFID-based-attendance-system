@@ -3,20 +3,17 @@ import certifi
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
-# Load environment variables from the backend .env file
-dotenv_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'backend', '.env')
-load_dotenv(dotenv_path)
+def get_attendance_data():
+    # Load environment variables from the backend .env file
+    dotenv_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'backend', '.env')
+    load_dotenv(dotenv_path)
 
-# Get MongoDB URI
-mongo_uri = os.getenv('MONGO_URI')
+    # Get MongoDB URI
+    mongo_uri = os.getenv('MONGO_URI')
 
-if not mongo_uri:
-    print("Error: MONGO_URI not found in the backend .env file.")
-    exit(1)
+    if not mongo_uri:
+        raise Exception("MONGO_URI not found in the backend .env file.")
 
-print("Connecting to MongoDB...\n")
-
-try:
     # Connect to MongoDB cluster
     client = MongoClient(mongo_uri, tlsCAFile=certifi.where())
     db = client.get_default_database() 
@@ -24,15 +21,21 @@ try:
     # Collections
     students_coll = db['students']
     attendances_coll = db['attendances']
+    users_coll = db['users']
     
-    # Fetch all students and attendances
+    # Fetch all students, attendances, and users
     students = list(students_coll.find({}))
     sessions = list(attendances_coll.find({}).sort("date", 1))
+    users = list(users_coll.find({}))
     
-    if len(sessions) == 0:
-        print("No attendance sessions found.")
-        exit(0)
-        
+    # Mapping moduleId to adminName (Faculty)
+    module_to_faculty = {}
+    for u in users:
+        mod_id = u.get('moduleId')
+        name = u.get('adminName', u.get('username', 'Unknown Faculty'))
+        if mod_id:
+            module_to_faculty[mod_id] = name
+    
     # Get unique dates
     date_set = []
     for s in sessions:
@@ -52,50 +55,44 @@ try:
             date_to_present[date_val] = set()
         date_to_present[date_val].update(present_students)
         
-    # Build the header
-    # 18 chars for Enrollment, 25 for name
-    header = f"{'Enrollment no.':<16} | {'Student name':<25}"
-    for d in date_set:
-        header += f" | {d:<10}"
-    header += f" | {'Present':<7} | {'Absent':<6} | {'%':<5}"
+    result_data = {}
     
-    print("-" * len(header))
-    print(header)
-    print("-" * len(header))
-    
-    # Process each student
-    if len(students) == 0:
-        print("No students enrolled yet.")
-    else:
-        for student in students:
-            en = student.get('enrollmentNumber', 'N/A')
-            name = student.get('name', 'N/A')
+    for student in students:
+        en = student.get('enrollmentNumber')
+        if not en:
+            continue
             
-            # Truncate strings to fit columns if needed
-            en_str = str(en)[:16]
-            name_str = str(name)[:25]
-            
-            row_str = f"{en_str:<16} | {name_str:<25}"
-            
-            present_count = 0
-            for d in date_set:
-                if en in date_to_present.get(d, set()):
-                    status = "P"
-                    present_count += 1
-                else:
-                    status = "A"
-                # Center the P/A under the 10-char date
-                row_str += f" | {status:^10}"
+        email = student.get('email', 'N/A')
+        mod_id = student.get('moduleId')
+        faculty_name = module_to_faculty.get(mod_id, 'Unknown Faculty')
+        
+        name = student.get('name', 'N/A')
+        
+        present_dates = []
+        absent_dates = []
+        
+        present_count = 0
+        for d in date_set:
+            if en in date_to_present.get(d, set()):
+                present_dates.append(d)
+                present_count += 1
+            else:
+                absent_dates.append(d)
                 
-            absent_count = total_sessions - present_count
-            percentage = round((present_count / total_sessions) * 100) if total_sessions > 0 else 0
-            
-            row_str += f" | {present_count:<7} | {absent_count:<6} | {percentage:<4}%"
-            print(row_str)
-            
-    print("-" * len(header))
-    print(f"Total sessions: {total_sessions}")
-    print(f"Total students: {len(students)}")
-            
-except Exception as e:
-    print(f"An error occurred: {e}")
+        percentage = round((present_count / total_sessions) * 100) if total_sessions > 0 else 0
+        
+        result_data[en] = {
+            "name": name,
+            "percentage": percentage,
+            "email": email,
+            "absent_dates": absent_dates,
+            "present_dates": present_dates,
+            "Faculty_name": faculty_name,
+            "enrollment": en
+        }
+        
+    return result_data
+
+if __name__ == "__main__":
+    import json
+    print(json.dumps(get_attendance_data(), indent=4))
