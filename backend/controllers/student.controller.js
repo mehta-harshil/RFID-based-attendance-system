@@ -2,7 +2,7 @@ const Student = require('../models/Student');
 
 exports.addStudent = async (req, res) => {
   try {
-    const { enrollmentNumber, name, gender, moduleId, rfid } = req.body;
+    const { enrollmentNumber, name, email, gender, moduleId, rfid } = req.body;
     
     if (!enrollmentNumber || enrollmentNumber.length < 2) {
         return res.status(400).json({ message: 'Enrollment number must be at least 2 digits.' });
@@ -10,6 +10,10 @@ exports.addStudent = async (req, res) => {
 
     if (!rfid) {
         return res.status(400).json({ message: 'RFID is required.' });
+    }
+
+    if (!email) {
+        return res.status(400).json({ message: 'Email is required.' });
     }
 
     let existingStudent = await Student.findOne({ enrollmentNumber });
@@ -20,7 +24,7 @@ exports.addStudent = async (req, res) => {
     // Generate fingerprintId from last 2 digits of enrollment number
     const fingerprintId = enrollmentNumber.slice(-2);
     
-    const student = new Student({ enrollmentNumber, name, gender, moduleId, fingerprintId, rfid });
+    const student = new Student({ enrollmentNumber, name, email, gender, moduleId, fingerprintId, rfid });
     await student.save();
     
     res.status(201).json({ message: 'Student added successfully!', student });

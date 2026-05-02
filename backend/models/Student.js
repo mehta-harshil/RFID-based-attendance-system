@@ -15,6 +15,11 @@ const studentSchema = new mongoose.Schema({
     enum: ['Male', 'Female', 'Other'],
     required: true
   },
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
   moduleId: {
     type: String,
     required: true

@@ -623,6 +623,7 @@
                                             <th class="text-center" style="min-width: 70px;">Sr no.</th>
                                             <th style="min-width: 160px;">Enrollment Number</th>
                                             <th style="min-width: 200px;">Name</th>
+                                            <th style="min-width: 200px;">Email</th>
                                             <th style="min-width: 100px;">Gender</th>
                                         </tr>
                                     </thead>
@@ -631,10 +632,11 @@
                                             <td class="text-center">{{ $index + 1 }}</td>
                                             <td class="fw-semibold text-dark">{{ student.enrollmentNumber }}</td>
                                             <td>{{ student.name }}</td>
+                                            <td>{{ student.email }}</td>
                                             <td>{{ student.gender }}</td>
                                         </tr>
                                         <tr ng-if="studentsList.length === 0">
-                                            <td colspan="4" class="text-center py-4 text-muted">No students enrolled
+                                            <td colspan="5" class="text-center py-4 text-muted">No students enrolled
                                                 yet.</td>
                                         </tr>
                                     </tbody>
@@ -660,6 +662,11 @@
                                     <label class="fw-bold mb-2 text-dark">Name</label>
                                     <input type="text" class="form-control py-2 text-muted" placeholder="Eg. Joe Doe"
                                         ng-model="newStudent.name" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="fw-bold mb-2 text-dark">Email address</label>
+                                    <input type="email" class="form-control py-2 text-muted" placeholder="Eg. joedoe@example.com"
+                                        ng-model="newStudent.email" required>
                                 </div>
                                 <div class="mb-4">
                                     <label class="fw-bold mb-2 text-dark">RFID Tag ID</label>
@@ -689,7 +696,7 @@
                                 </div>
                                 <div class="d-flex gap-3 mt-5">
                                     <button type="button" class="btn btn-light flex-grow-1 text-muted"
-                                        ng-click="newStudent = {gender: 'Male', rfid: ''}"
+                                        ng-click="newStudent = {gender: 'Male', rfid: '', email: ''}"
                                         style="background-color: #f1f3f5;" ng-disabled="isScanning">Reset</button>
                                     <button type="submit" class="btn flex-grow-1"
                                         style="background-color: #e6edfb; color: #1c5f99; border: none; font-weight: 500;"

@@ -62,13 +62,14 @@ app.controller("DashboardController", function($scope, $location, $http) {
     }
 
     $scope.enrollStudent = function() {
-        if (!$scope.newStudent.enrollmentNumber || !$scope.newStudent.name || !$scope.newStudent.rfid) return;
+        if (!$scope.newStudent.enrollmentNumber || !$scope.newStudent.name || !$scope.newStudent.email || !$scope.newStudent.rfid) return;
         
         $scope.isScanning = true;
 
         var payload = {
             enrollmentNumber: $scope.newStudent.enrollmentNumber,
             name: $scope.newStudent.name,
+            email: $scope.newStudent.email,
             gender: $scope.newStudent.gender,
             rfid: $scope.newStudent.rfid,
             moduleId: $scope.userProfile.moduleId
@@ -78,7 +79,7 @@ app.controller("DashboardController", function($scope, $location, $http) {
             .then(function(response) {
                 $scope.isScanning = false;
                 alert("Success! Student saved to database.");
-                $scope.newStudent = { gender: 'Male', rfid: '' }; // reset form
+                $scope.newStudent = { gender: 'Male', rfid: '', email: '' }; // reset form
                 fetchStudents();
             })
             .catch(function(error) {
